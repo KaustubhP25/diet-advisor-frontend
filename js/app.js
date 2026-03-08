@@ -1,5 +1,5 @@
 const API_URL = "https://zlecfce3s2.execute-api.us-east-1.amazonaws.com/analyze";
-
+console.log("app.js loaded")
 async function analyze() {
 
   const age = document.getElementById("age").value;
