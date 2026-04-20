@@ -38,7 +38,7 @@ document.getElementById('login-btn').addEventListener('click', login);
 
 
 
-/window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
 
