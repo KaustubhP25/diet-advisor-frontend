@@ -1,5 +1,3 @@
-const API_URL = "https://zlecfce3s2.execute-api.us-east-1.amazonaws.com/analyze";
-
 const config = {
     domain: "us-east-1g2froq2nc.auth.us-east-1.amazoncognito.com",
     clientId: "4vevev7h7gkqj07q449qc5ki42",
