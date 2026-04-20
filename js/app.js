@@ -5,27 +5,28 @@ const config = {
     redirectUri: "https://diet-advisor-frontend.vercel.app/",
     userPoolId: "us-east-1_g2Froq2nC"
 };
-console.log("app.js loaded")
+
 async function analyze() {
+    const age = document.getElementById("age").value;
+    const weight = document.getElementById("weight").value;
+    const goal = document.getElementById("goal").value;
+    const food = document.getElementById("food").value;
+    const resultBox = document.getElementById("result");
 
-  const age = document.getElementById("age").value;
-  const weight = document.getElementById("weight").value;
-  const goal = document.getElementById("goal").value;
-  const food = document.getElementById("food").value;
-
-  const resultBox = document.getElementById("result");
-
-  resultBox.innerHTML = "Analyzing your diet...";
-
-  const response = await fetch(API_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({ age, weight, goal, food })
-  });
-
-  const data = await response.text();
-
-  resultBox.innerHTML = data;
+    resultBox.innerHTML = "Analyzing your diet...";
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ age, weight, goal, food })
+        });
+        const data = await response.text();
+        resultBox.innerHTML = data;
+    } catch (error) {
+        resultBox.innerHTML = "Error analyzing diet. Please try again.";
+        console.error(error);
+    }
 }
 
 function login() {
@@ -33,32 +34,26 @@ function login() {
     window.location.href = authUrl;
 }
 
-// Attach to your login button (make sure your HTML button has id="login-btn")
-document.getElementById('login-btn').addEventListener('click', login);
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Attach login click
+    const loginBtn = document.getElementById('login-btn');
+    if (loginBtn) loginBtn.addEventListener('click', login);
 
-
-
-window.addEventListener('DOMContentLoaded', () => {
+    // Check for Cognito Auth Code in URL
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
 
     if (authCode) {
-        // Save the code to use later if needed
         localStorage.setItem('auth_code', authCode);
-
-        // UI Updates
-        const loginBtn = document.getElementById('login-btn');
-        const analyzeBtn = document.querySelector('button[onclick="analyze()"]');
         const resultBox = document.getElementById('result');
 
         if (loginBtn) loginBtn.style.display = 'none';
-        
         if (resultBox) {
-            resultBox.innerHTML = "✅ Authenticated. Ready to analyze!";
-            resultBox.style.color = "#2ecc71"; // A nice fitness green
+            resultBox.innerHTML = "✅ Authenticated. You can now use the analyzer!";
+            resultBox.style.color = "#2ecc71";
         }
-
-        // Clean the URL so the code doesn't look messy
+        // Clean the URL
         window.history.replaceState({}, document.title, "/");
     }
 });
