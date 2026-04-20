@@ -38,26 +38,27 @@ document.getElementById('login-btn').addEventListener('click', login);
 
 
 
-// This runs as soon as the page loads to check if the user just logged in
-window.addEventListener('DOMContentLoaded', () => {
+/window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
 
     if (authCode) {
-        console.log("Login successful! Authorization Code:", authCode);
-        
-        // 1. Hide the login button since user is now logged in
-        const loginBtn = document.getElementById('login-btn');
-        if (loginBtn) loginBtn.style.display = 'none';
+        // Save the code to use later if needed
+        localStorage.setItem('auth_code', authCode);
 
-        // 2. Show a welcome message or unlock the fitness forms
+        // UI Updates
+        const loginBtn = document.getElementById('login-btn');
+        const analyzeBtn = document.querySelector('button[onclick="analyze()"]');
         const resultBox = document.getElementById('result');
+
+        if (loginBtn) loginBtn.style.display = 'none';
+        
         if (resultBox) {
-            resultBox.innerHTML = "Securely logged in. You can now analyze your diet!";
-            resultBox.style.color = "green";
+            resultBox.innerHTML = "✅ Authenticated. Ready to analyze!";
+            resultBox.style.color = "#2ecc71"; // A nice fitness green
         }
 
-        // Optional: Clean the URL so the code doesn't stay in the address bar
+        // Clean the URL so the code doesn't look messy
         window.history.replaceState({}, document.title, "/");
     }
 });
