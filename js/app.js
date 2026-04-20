@@ -1,9 +1,9 @@
 const API_URL = "https://zlecfce3s2.execute-api.us-east-1.amazonaws.com/analyze";
+
 const config = {
     domain: "us-east-1g2froq2nc.auth.us-east-1.amazoncognito.com",
     clientId: "4vevev7h7gkqj07q449qc5ki42",
     redirectUri: "https://diet-advisor-frontend.vercel.app/",
-    userPoolId: "us-east-1_g2Froq2nC"
 };
 
 async function analyze() {
@@ -34,26 +34,26 @@ function login() {
     window.location.href = authUrl;
 }
 
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    // Attach login click
+// Logic to run when page loads
+window.addEventListener('DOMContentLoaded', () => {
     const loginBtn = document.getElementById('login-btn');
-    if (loginBtn) loginBtn.addEventListener('click', login);
+    const authStatus = document.getElementById('auth-status');
+    
+    if (loginBtn) {
+        loginBtn.addEventListener('click', login);
+    }
 
-    // Check for Cognito Auth Code in URL
+    // Check if we are returning from a successful Cognito login
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
 
     if (authCode) {
-        localStorage.setItem('auth_code', authCode);
-        const resultBox = document.getElementById('result');
-
         if (loginBtn) loginBtn.style.display = 'none';
-        if (resultBox) {
-            resultBox.innerHTML = "✅ Authenticated. You can now use the analyzer!";
-            resultBox.style.color = "#2ecc71";
+        if (authStatus) {
+            authStatus.innerHTML = "✅ Authenticated";
+            authStatus.style.color = "#2ecc71";
         }
-        // Clean the URL
+        // Clean URL so the code doesn't stay visible
         window.history.replaceState({}, document.title, "/");
     }
 });
