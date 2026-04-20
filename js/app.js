@@ -35,3 +35,29 @@ function login() {
 
 // Attach to your login button (make sure your HTML button has id="login-btn")
 document.getElementById('login-btn').addEventListener('click', login);
+
+
+
+// This runs as soon as the page loads to check if the user just logged in
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get('code');
+
+    if (authCode) {
+        console.log("Login successful! Authorization Code:", authCode);
+        
+        // 1. Hide the login button since user is now logged in
+        const loginBtn = document.getElementById('login-btn');
+        if (loginBtn) loginBtn.style.display = 'none';
+
+        // 2. Show a welcome message or unlock the fitness forms
+        const resultBox = document.getElementById('result');
+        if (resultBox) {
+            resultBox.innerHTML = "Securely logged in. You can now analyze your diet!";
+            resultBox.style.color = "green";
+        }
+
+        // Optional: Clean the URL so the code doesn't stay in the address bar
+        window.history.replaceState({}, document.title, "/");
+    }
+});
